@@ -1,13 +1,20 @@
 Achieved Shadow Mapping by Unity
 --------------------------------------
 注意：
+
 1.投影的物体请设置为Caster层，如果没有Caster层，请手动添加。
+
+![image-20200721115717534](imgs/image-20200721115717534.png)
 
 2.投影的物体请把Render组件对应的Cast Shadows关闭，Receive Shadows关闭。
 
 3.Dir Light Camera 为自动生成的光源位置相机。
 
+![image-20200721115736007](imgs/image-20200721115736007.png)
+
 4.ShadowMapping脚本挂在MainCamera上，对应的参数请自行调整
+
+![image-20200721115612991](imgs/image-20200721115612991.png)
 
 TODO:
 1.PCF（完成）
