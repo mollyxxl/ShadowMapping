@@ -7,7 +7,10 @@ Achieved Shadow Mapping by Unity
 4.ShadowMapping脚本挂在MainCamera上，对应的参数请自行调整
 
 TODO:
-1.PCF
+1.PCF（完成）
+
+![image-20200721114955902](imgs/image-20200721114955902.png)
+
 2.运行时切换分辨率
 3.others，想到再补充吧！
 
