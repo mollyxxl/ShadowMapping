@@ -21,7 +21,15 @@ TODO:
 
 ![image-20200721114955902](imgs/image-20200721114955902.png)
 
-2.运行时切换分辨率
+2.运行时切换分辨率(完成)
+
+Shadow Resolution=Very High
+
+![image-20200721140646915](imgs/image-20200721140646915.png)
+
+Shadow Resolution=Low
+
+![image-20200721140717712](imgs/image-20200721140717712.png)
 
 3.others，想到再补充吧！
 

@@ -21,17 +21,31 @@ public class ShadowMapping : MonoBehaviour
         VeryHigh=8,
     }
     public CustomShadowResolution shadowResolution =  CustomShadowResolution.Low;
+    private CustomShadowResolution cachedShadowResolution = CustomShadowResolution.Low;
     void Start()
     {
+        cachedShadowResolution = shadowResolution;
         LightCamera = CreateDirLightCamera();
         if (!LightCamera.targetTexture)
-            LightCamera.targetTexture = Create2DTexture(LightCamera);
+            LightCamera.targetTexture = Create2DTexture(LightCamera,(int)shadowResolution);
     }
 
     void Update()
     {
         if(LightCamera==null)
             LightCamera = CreateDirLightCamera();
+
+        //check change shadow resolution
+        if (cachedShadowResolution != shadowResolution)
+        {
+            var preTex = LightCamera.targetTexture;
+            if (!preTex)
+            {
+                preTex.Release();
+            }
+            LightCamera.targetTexture = Create2DTexture(LightCamera, (int)shadowResolution);
+            cachedShadowResolution = shadowResolution;
+        }
 
         LightCamera.transform.position = dirLight.gameObject.transform.position;
         LightCamera.transform.rotation = dirLight.gameObject.transform.rotation;
@@ -76,12 +90,12 @@ public class ShadowMapping : MonoBehaviour
         lightCamera.cullingMask = 1 << LayerMask.NameToLayer("Caster");  //设置CullingMask为"Caster"
     }
 
-    private RenderTexture Create2DTexture(Camera cam)
+    private RenderTexture Create2DTexture(Camera cam,int shadowResolution)
     {
         RenderTextureFormat rtFormat = RenderTextureFormat.Default;
         if (!SystemInfo.SupportsRenderTextureFormat(rtFormat))
             rtFormat = RenderTextureFormat.Default;
-        var rt_2d = new RenderTexture(512 * (int)shadowResolution, 512 * (int)shadowResolution, 24, rtFormat);
+        var rt_2d = new RenderTexture(512 * shadowResolution, 512 * shadowResolution, 24, rtFormat);
         rt_2d.hideFlags = HideFlags.DontSave;
         Shader.SetGlobalTexture("_gShadowMapTexture", rt_2d);
 
