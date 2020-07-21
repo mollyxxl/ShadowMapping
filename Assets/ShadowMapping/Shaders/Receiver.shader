@@ -39,7 +39,21 @@
                 o.shadowCoord=mul(_gWorldToShadow,worldPos);
                 return o;
             }
-
+            //对附近像素多次采样求平均来实现阴影边缘抗锯齿
+            float PCFSample(float depth,float2 uv)
+            {
+                float shadow=0.0;
+                for(int x=-1;x<=1;++x)
+                {
+                    for(int y=-1;y<=1;++y)
+                    {
+                        float4 col=tex2D(_gShadowMapTexture,uv+float2(x,y)*_gShadowMapTexture_TexelSize.xy);
+                        float sampleDepth=DecodeFloatRGBA(col);
+                        shadow+=sampleDepth<depth?_gShadowStrength : 1 ;
+                    }
+                }
+                return shadow/9;
+            }
             fixed4 frag (v2f i) : SV_Target
             {
                 //shadow 
@@ -55,9 +69,12 @@
                 #endif
 
                 //sample depth Texture;
-                float4 col=tex2D(_gShadowMapTexture,uv);
-                float sampleDepth=DecodeFloatRGBA(col);
-                float shadow=sampleDepth<depth?_gShadowStrength : 1 ;
+                //float4 col=tex2D(_gShadowMapTexture,uv);
+                //float sampleDepth=DecodeFloatRGBA(col);
+                //float shadow= sampleDepth<depth?_gShadowStrength : 1 ;
+
+                //soft shadow
+                float shadow=PCFSample(depth,uv);
                 return shadow;
             }
             ENDCG
